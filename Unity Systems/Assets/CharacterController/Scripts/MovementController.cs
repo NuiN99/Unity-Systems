@@ -11,7 +11,7 @@ namespace NuiN.Movement
         IMovement _movement;
         IMovementInput _input;
         
-        Queue<MovementConstraints> _forceQueue = new();
+        List<MovementConstraint> _activeConstraints = new();
 
         [SerializeField] Rigidbody rb;
         
@@ -19,7 +19,7 @@ namespace NuiN.Movement
         [field: SerializeField, ReadOnlyPlayMode] public bool CanRotate { get; private set; } = true;
         [field: SerializeField, ReadOnlyPlayMode] public bool IsRunning { get; private set; } = false;
         
-        bool ConstraintApplied => _forceQueue.Count > 0;
+        bool ConstraintApplied => _activeConstraints.Count > 0;
 
         void Reset()
         {
@@ -55,25 +55,27 @@ namespace NuiN.Movement
             if(CanRotate) _movement.Rotate(_input);
         }
         
-        public void ApplyConstraint(float duration, bool allowMove = true, bool allowRotate = true)
+        public void ApplyConstraint(float duration, MovementConstraint constraint)
         {
-            _forceQueue.Enqueue(new MovementConstraints(allowMove, allowRotate));
-            EvaluateConstraints();
-            StartCoroutine(ApplyForceRoutine(duration));
+            StartCoroutine(ApplyConstraintRoutine(duration, constraint));
         }
 
-        IEnumerator ApplyForceRoutine(float duration)
+        IEnumerator ApplyConstraintRoutine(float duration, MovementConstraint constraint)
         {
+            _activeConstraints.Add(constraint);
+            EvaluateConstraints();
+            
             yield return new WaitForSeconds(duration);
-            _forceQueue.Dequeue();
+            
+            _activeConstraints.Remove(constraint);
             EvaluateConstraints();
         }
 
         void EvaluateConstraints()
         {
             // only allow move and rotate if every element on the stack allows it
-            CanMove = _forceQueue.All(constraint => constraint.canMove);
-            CanRotate = _forceQueue.All(constraint => constraint.canRotate);
+            CanMove = _activeConstraints.All(constraint => constraint.canMove);
+            CanRotate = _activeConstraints.All(constraint => constraint.canRotate);
         }
     }
 }

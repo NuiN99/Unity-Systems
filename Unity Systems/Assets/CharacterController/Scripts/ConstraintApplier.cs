@@ -15,7 +15,7 @@ public class ConstraintApplier : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            mover.ApplyConstraint(constraintDuration, allowMove, allowRotate);
+            mover.ApplyConstraint(constraintDuration, new MovementConstraint(allowMove, allowRotate));
         }
     }
 }
