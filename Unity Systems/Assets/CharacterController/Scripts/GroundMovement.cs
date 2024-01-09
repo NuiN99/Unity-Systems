@@ -30,13 +30,13 @@ namespace NuiN.Movement
         [Header("Drag Settings")]
         [SerializeField] float groundDrag = 4f;
         [SerializeField] float airDrag = 0;
-        [SerializeField] float forceAppliedDrag = 0.5f;
+        //[SerializeField] float forceAppliedDrag = 0.5f;
         
         [Header("Environment Settings")]
         [SerializeField] LayerMask groundMask;
         [SerializeField] float groundCheckDist = 0.25f;
         [SerializeField] float slopeCheckDist = 0.25f;
-        [SerializeField] float maxSlopeAngle = 45f;
+        //[SerializeField] float maxSlopeAngle = 45f;
         
         public Rigidbody RB { get; set; }
 
