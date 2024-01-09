@@ -9,6 +9,7 @@ public class ActiveRagdoll : MonoBehaviour
     
     [SerializeField] float globalMoveForce = 1f;
     [SerializeField] float globalRotateForce = 1f;
+    [SerializeField] float damping = 0.9f;
 
     [SerializeField] Transform center;
     [SerializeField] float ragdollEnableDist = 2f;
@@ -27,7 +28,7 @@ public class ActiveRagdoll : MonoBehaviour
         Vector3 sumPos = default;
         foreach (var limb in limbs)
         {
-            limb.MoveToTarget(globalMoveForce, globalRotateForce);
+            limb.MoveToTarget(globalMoveForce, globalRotateForce, damping);
             sumPos += limb.RB.position;
         }
         
@@ -35,7 +36,8 @@ public class ActiveRagdoll : MonoBehaviour
         float distFromAvg = Vector3.Distance(center.position, _averagePhysicalPos);
 
         nonPhysicalRig.position = new Vector3(_averagePhysicalPos.x, nonPhysicalRig.position.y, 0);
-
+        
+        
         /*if (distFromAvg >= ragdollEnableDist)
         {
             _fullRagdoll = true;
@@ -52,16 +54,18 @@ public class PhysicalLimbTargeting
     [field: SerializeField] public float RotateForce { get; private set; } = 25;
 
     float _maxDist = 5f;
-    public void MoveToTarget(float moveMult, float rotateMult)
+    public void MoveToTarget(float moveMult, float rotateMult, float damping)
     {
         float dist = Vector3.Distance(Target.position, RB.position);
         dist *= dist;
         
         Vector3 direction = Target.position - RB.position;
-        RB.AddForce(direction * (MoveForce * moveMult * dist * Time.fixedDeltaTime));
+        RB.velocity += direction * (MoveForce * moveMult * dist * Time.fixedDeltaTime * RB.position.y);
         
         float rotationFactor = Mathf.Clamp01(1.0f - dist / _maxDist);
         Quaternion targetRotation = Target.rotation * Quaternion.Inverse(RB.rotation);
         RB.AddTorque(targetRotation.eulerAngles * (RotateForce * rotateMult * rotationFactor *  Time.fixedDeltaTime));
+
+        RB.velocity *= damping;
     }
 }
