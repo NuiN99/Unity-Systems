@@ -17,31 +17,48 @@ public class ActiveRagdoll : MonoBehaviour
     [SerializeField] Transform nonPhysicalRig;
     [SerializeField] float yOffset = 1f;
     
+    [SerializeField] float limbDrag = 2f;
+
+    [SerializeField] float maxVelocity = 2.5f;
+    
     [SerializeField] PhysicalLimbTargeting[] limbs;
     
     Vector3 _averagePhysicalPos;
 
     void FixedUpdate()
     {
-        if (_fullRagdoll) return;
-        
         Vector3 sumPos = default;
         foreach (var limb in limbs)
         {
-            limb.MoveToTarget(globalMoveForce, globalRotateForce, damping);
+            if (!_fullRagdoll)
+            {
+                limb.RB.drag = limbDrag;
+                limb.MoveToTarget(globalMoveForce, globalRotateForce, damping, maxVelocity);
+            }
+            else
+            {
+                limb.RB.drag = 0;
+            }
+            
             sumPos += limb.RB.position;
         }
         
         _averagePhysicalPos = sumPos / limbs.Length;
         float distFromAvg = Vector3.Distance(center.position, _averagePhysicalPos);
 
-        nonPhysicalRig.position = new Vector3(_averagePhysicalPos.x, nonPhysicalRig.position.y, 0);
+        nonPhysicalRig.position = new Vector3(_averagePhysicalPos.x, nonPhysicalRig.position.y, _averagePhysicalPos.z);
         
-        
-        /*if (distFromAvg >= ragdollEnableDist)
+        if (!_fullRagdoll && distFromAvg >= ragdollEnableDist)
         {
-            _fullRagdoll = true;
-        }*/
+            StartCoroutine(StunRoutine());
+        }
+    }
+
+    IEnumerator StunRoutine()
+    {
+        _fullRagdoll = true;
+        yield return new WaitForSeconds(2f);
+        _fullRagdoll = false;
     }
 }
 
@@ -54,17 +71,16 @@ public class PhysicalLimbTargeting
     [field: SerializeField] public float RotateForce { get; private set; } = 25;
 
     float _maxDist = 5f;
-    public void MoveToTarget(float moveMult, float rotateMult, float damping)
+    public void MoveToTarget(float moveMult, float rotateMult, float damping, float maxVelocity)
     {
-        float dist = Vector3.Distance(Target.position, RB.position);
-        dist *= dist;
-        
         Vector3 direction = Target.position - RB.position;
-        RB.velocity += direction * (MoveForce * moveMult * dist * Time.fixedDeltaTime * RB.position.y);
+        if (RB.velocity.magnitude < maxVelocity)
+        {
+            RB.velocity += direction * (MoveForce * moveMult * Time.fixedDeltaTime * RB.position.y);
+        }
         
-        float rotationFactor = Mathf.Clamp01(1.0f - dist / _maxDist);
         Quaternion targetRotation = Target.rotation * Quaternion.Inverse(RB.rotation);
-        RB.AddTorque(targetRotation.eulerAngles * (RotateForce * rotateMult * rotationFactor *  Time.fixedDeltaTime));
+        RB.AddTorque(targetRotation.eulerAngles * (RotateForce * rotateMult *  Time.fixedDeltaTime));
 
         RB.velocity *= damping;
     }
