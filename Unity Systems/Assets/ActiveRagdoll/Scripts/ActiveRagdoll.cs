@@ -16,7 +16,8 @@ public class ActiveRagdoll : MonoBehaviour
     [SerializeField] float globalRotateForce = 1f;
     [SerializeField] float damping = 0.9f;
 
-    [SerializeField] float ragdollEnableDist = 2f;
+    [SerializeField] float maxOffBalanceDist = 2f;
+    [SerializeField] float lyingDownCheckRadius = 1f;
 
     [SerializeField] Transform nonPhysicalRig;
     [SerializeField] Transform nonPhysicalRigCenter;
@@ -29,8 +30,15 @@ public class ActiveRagdoll : MonoBehaviour
 
     [SerializeField] Transform phyiscalHead;
     [SerializeField] Transform physicalHips;
+
+    [SerializeField] Transform leftFoot;
+    [SerializeField] Transform rightFoot;
+
+    [SerializeField] float groundCheckDist = 0.25f;
+    [SerializeField] LayerMask groundMask;
     
     [SerializeField] PhysicalLimbTargeting[] limbs;
+
     
 
     void FixedUpdate()
@@ -47,10 +55,15 @@ public class ActiveRagdoll : MonoBehaviour
                 limb.RB.drag = 0;
             }
         }
+
+
+        bool feetOnGround = Physics.Raycast(GetAverageFootPos(), Vector3.down, out RaycastHit hit, groundCheckDist, groundMask);
+        float offBalanceDist = Vector3.Distance(physicalRigCenter.position.With(y: 0), GetAverageFootPos().With(y: 0));
+
+        bool offBalance = offBalanceDist >= maxOffBalanceDist;
+        bool lyingDown = Physics.OverlapSphere(physicalRigCenter.position, lyingDownCheckRadius, groundMask).Length > 0;
         
-        float distApart = Vector3.Distance(nonPhysicalRigCenter.position.With(y: 0), physicalRigCenter.position.With(y: 0));
-        
-        if (!_fullRagdoll && distApart >= ragdollEnableDist)
+        if (!_fullRagdoll && offBalance && !lyingDown)
         {
             StartCoroutine(StunRoutine());
         }
@@ -77,6 +90,29 @@ public class ActiveRagdoll : MonoBehaviour
     {
         float angleHeadToHips = Vector3.Angle(phyiscalHead.position, physicalHips.position);
         return Quaternion.AngleAxis(angleHeadToHips, Vector3.up);
+    }
+
+    Vector3 GetAverageFootPos()
+    {
+        return (leftFoot.position + rightFoot.position) / 2;
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(physicalRigCenter.position, lyingDownCheckRadius);
+        Gizmos.DrawSphere(GetAverageFootPos(), 0.05f);
+        Gizmos.color = default;
+        
+        Debug.DrawRay(GetAverageFootPos(), Vector3.down * groundCheckDist);
+        
+        // if grounded
+        if (Physics.Raycast(GetAverageFootPos(), Vector3.down, out RaycastHit hit, groundCheckDist, groundMask))
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawSphere(hit.point, 0.05f);
+            Gizmos.color = default;
+        }
     }
 }
 
