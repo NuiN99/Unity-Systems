@@ -450,19 +450,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 450167309fc5fe849b89e9c4cff417f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  globalMoveForce: 20
+  globalMoveForce: 10
   globalRotateForce: 0
   damping: 0.9
   center: {fileID: 992554740}
   ragdollEnableDist: 0.225
   nonPhysicalRig: {fileID: 507885278}
   yOffset: 1
-  limbDrag: 25
+  limbDrag: 5
   maxVelocity: 2.5
   limbs:
   - <RB>k__BackingField: {fileID: 640020055}
     <Target>k__BackingField: {fileID: 507885289}
-    <MoveForce>k__BackingField: 100
+    <MoveForce>k__BackingField: 0
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 992554741}
     <Target>k__BackingField: {fileID: 507885288}
@@ -502,7 +502,7 @@ MonoBehaviour:
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 1817996924}
     <Target>k__BackingField: {fileID: 507885279}
-    <MoveForce>k__BackingField: 25
+    <MoveForce>k__BackingField: 0
     <RotateForce>k__BackingField: 25
 --- !u!4 &271301185
 Transform:
