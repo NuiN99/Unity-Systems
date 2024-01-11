@@ -431,6 +431,7 @@ GameObject:
   m_Component:
   - component: {fileID: 271301185}
   - component: {fileID: 271301184}
+  - component: {fileID: 271301186}
   m_Layer: 0
   m_Name: ActiveRagdoll
   m_TagString: Untagged
@@ -450,23 +451,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 450167309fc5fe849b89e9c4cff417f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 271301186}
+  getUpAnim: {fileID: 7400000, guid: dad309973892da240a9dab42f938670f, type: 2}
+  runAnim: {fileID: 0}
   globalMoveForce: 10
   globalRotateForce: 0
   damping: 0.9
-  center: {fileID: 992554740}
   ragdollEnableDist: 0.225
   nonPhysicalRig: {fileID: 507885278}
-  yOffset: 1
+  nonPhysicalRigCenter: {fileID: 507885288}
+  physicalRigCenter: {fileID: 992554740}
   limbDrag: 5
   maxVelocity: 2.5
+  phyiscalHead: {fileID: 640020057}
+  physicalHips: {fileID: 992554740}
   limbs:
   - <RB>k__BackingField: {fileID: 640020055}
     <Target>k__BackingField: {fileID: 507885289}
-    <MoveForce>k__BackingField: 0
+    <MoveForce>k__BackingField: 20
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 992554741}
     <Target>k__BackingField: {fileID: 507885288}
-    <MoveForce>k__BackingField: 0
+    <MoveForce>k__BackingField: 10
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 1052312607}
     <Target>k__BackingField: {fileID: 507885287}
@@ -502,7 +508,7 @@ MonoBehaviour:
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 1817996924}
     <Target>k__BackingField: {fileID: 507885279}
-    <MoveForce>k__BackingField: 0
+    <MoveForce>k__BackingField: 15
     <RotateForce>k__BackingField: 25
 --- !u!4 &271301185
 Transform:
@@ -521,6 +527,20 @@ Transform:
   - {fileID: 507885278}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &271301186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 271301183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad50f81b1d25c441943c37a89ba23f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Animator: {fileID: 304056734}
+  _ActionOnDisable: 0
 --- !u!95 &304056734
 Animator:
   serializedVersion: 5
@@ -684,7 +704,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 0bd0eec35fee0004eb04672188d7fa2b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0bd0eec35fee0004eb04672188d7fa2b,
         type: 3}
@@ -732,6 +752,11 @@ PrefabInstance:
       value: Animated_Rig
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0bd0eec35fee0004eb04672188d7fa2b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168153666832646764, guid: 0bd0eec35fee0004eb04672188d7fa2b,
         type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -893,6 +918,12 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.09221154
   m_Center: {x: 0, y: 0.09221154, z: 0}
+--- !u!4 &640020057 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -5588326719299175106, guid: 0bd0eec35fee0004eb04672188d7fa2b,
+    type: 3}
+  m_PrefabInstance: {fileID: 178321275}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &751228700 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -4332706925441422008, guid: 0bd0eec35fee0004eb04672188d7fa2b,
