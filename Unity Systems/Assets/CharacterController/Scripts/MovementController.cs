@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace NuiN.Movement
 {
+    [RequireComponent(typeof(IMovement), typeof(IMovementInput))]
     public class MovementController : MonoBehaviour
     {
         IMovement _movement;
@@ -37,20 +38,15 @@ namespace NuiN.Movement
             _movement?.Assign(rb);
         }
 
-        void OnEnable()
+        void Update()
         {
-            _input.OnJump += _movement.Jump;
-        }
-        void OnDisable()
-        {
-            _input.OnJump -= _movement.Jump;
+            if(_input.ShouldJump()) _movement.Jump();
         }
 
         void FixedUpdate()
         {
             IsRunning = _input.IsRunning(); // only for debugging
             
-            _movement.FixedTick();
             if(CanMove) _movement.Move(_input);
             if(CanRotate) _movement.Rotate(_input);
         }
@@ -73,7 +69,7 @@ namespace NuiN.Movement
 
         void EvaluateConstraints()
         {
-            // only allow move and rotate if every element on the stack allows it
+            // only allow move and rotate if every element in the list allows it
             CanMove = _activeConstraints.All(constraint => constraint.canMove);
             CanRotate = _activeConstraints.All(constraint => constraint.canRotate);
         }

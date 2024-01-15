@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using NuiN.Movement;
+using NuiN.NExtensions;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -25,6 +26,11 @@ public class RandomMovementInput : MonoBehaviour, IMovementInput
     Quaternion IMovementInput.GetRotation()
     {
         return _rotation;
+    }
+
+    bool IMovementInput.ShouldJump()
+    {
+        return RandomUtils.BelowPercent(1f);
     }
 
     bool IMovementInput.IsRunning()

@@ -8,18 +8,7 @@ public class InspectorMovementInput : MonoBehaviour, IMovementInput
     [SerializeField] Quaternion rotation = Quaternion.Euler(0,0,0);
     [SerializeField] bool isRunning = false;
     [SerializeField] bool jump = false;
-
-    public Action OnJump { get; set; }
-
-    void Update()
-    {
-        if (jump == true)
-        {
-            jump = false;
-            OnJump?.Invoke();
-        }
-    }
-
+    
     Vector3 IMovementInput.GetDirection()
     {
         return direction;
@@ -28,6 +17,11 @@ public class InspectorMovementInput : MonoBehaviour, IMovementInput
     Quaternion IMovementInput.GetRotation()
     {
         return rotation;
+    }
+
+    bool IMovementInput.ShouldJump()
+    {
+        return jump;
     }
 
     bool IMovementInput.IsRunning()

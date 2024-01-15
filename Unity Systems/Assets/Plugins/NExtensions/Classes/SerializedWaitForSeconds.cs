@@ -10,6 +10,11 @@ namespace NuiN.NExtensions
         [SerializeField] float seconds;
         public float Seconds => seconds;
         public WaitForSeconds Wait { get; private set; }
+
+        public SerializedWaitForSeconds(float defaultSeconds)
+        {
+            seconds = defaultSeconds;
+        }
         
         public void Init()
         {

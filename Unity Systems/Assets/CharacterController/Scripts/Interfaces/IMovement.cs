@@ -6,7 +6,6 @@ namespace NuiN.Movement
     {
         Rigidbody RB { get; set; }
         void Assign(Rigidbody rb) => RB = rb;
-        void FixedTick();
         void Move(IMovementInput input);
         void Rotate(IMovementInput input);
         void Jump();
