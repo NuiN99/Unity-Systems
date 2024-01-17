@@ -858,11 +858,11 @@ MonoBehaviour:
   animator: {fileID: 271301186}
   getUpAnim: {fileID: 7400000, guid: dad309973892da240a9dab42f938670f, type: 2}
   runAnim: {fileID: 0}
-  globalMoveForce: 10
+  globalMoveForce: 2
   globalRotateForce: 0
-  damping: 0.9
-  maxOffBalanceDist: 0.25
-  lyingDownCheckRadius: 0.5
+  damping: 0.95
+  maxOffBalanceDist: 0.4
+  lyingDownCheckRadius: 0.6
   nonPhysicalRig: {fileID: 507885278}
   nonPhysicalRigCenter: {fileID: 507885288}
   physicalRigCenter: {fileID: 992554740}
@@ -879,7 +879,7 @@ MonoBehaviour:
   limbs:
   - <RB>k__BackingField: {fileID: 640020055}
     <Target>k__BackingField: {fileID: 507885289}
-    <MoveForce>k__BackingField: 20
+    <MoveForce>k__BackingField: 0.39999998
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 992554741}
     <Target>k__BackingField: {fileID: 507885288}
@@ -887,39 +887,39 @@ MonoBehaviour:
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 1052312607}
     <Target>k__BackingField: {fileID: 507885287}
-    <MoveForce>k__BackingField: 25
+    <MoveForce>k__BackingField: 0.5
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 129739037}
     <Target>k__BackingField: {fileID: 504851526}
-    <MoveForce>k__BackingField: 25
+    <MoveForce>k__BackingField: 0.5
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 334113522}
     <Target>k__BackingField: {fileID: 344094474}
-    <MoveForce>k__BackingField: 125
+    <MoveForce>k__BackingField: 2.5
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 1084653171}
     <Target>k__BackingField: {fileID: 507885284}
-    <MoveForce>k__BackingField: 125
+    <MoveForce>k__BackingField: 2.5
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 1588454901}
     <Target>k__BackingField: {fileID: 507885283}
-    <MoveForce>k__BackingField: 25
+    <MoveForce>k__BackingField: 0.5
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 1113857929}
     <Target>k__BackingField: {fileID: 503979509}
-    <MoveForce>k__BackingField: 25
+    <MoveForce>k__BackingField: 0.5
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 751228703}
     <Target>k__BackingField: {fileID: 1664615484}
-    <MoveForce>k__BackingField: 125
+    <MoveForce>k__BackingField: 2.5
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 1493804228}
     <Target>k__BackingField: {fileID: 507885280}
-    <MoveForce>k__BackingField: 125
+    <MoveForce>k__BackingField: 2.5
     <RotateForce>k__BackingField: 25
   - <RB>k__BackingField: {fileID: 1817996924}
     <Target>k__BackingField: {fileID: 507885279}
-    <MoveForce>k__BackingField: 15
+    <MoveForce>k__BackingField: 0.29999998
     <RotateForce>k__BackingField: 25
 --- !u!4 &271301185
 Transform:

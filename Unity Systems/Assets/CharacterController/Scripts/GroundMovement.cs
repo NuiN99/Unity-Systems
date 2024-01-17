@@ -58,7 +58,7 @@ namespace NuiN.Movement
 
             RB.drag = _grounded ? groundDrag : airDrag;
 
-            float speed = (input.IsRunning() ? runSpeed : walkSpeed) * Time.fixedDeltaTime;
+            float speed = (input.IsRunning() ? runSpeed : walkSpeed);
             
             if (!_grounded) speed *= airSpeedMult;
             
@@ -68,7 +68,7 @@ namespace NuiN.Movement
         void IMovement.Rotate(IMovementInput input)
         {
             Quaternion rotation = input.GetRotation();
-            float rotateSpeed = (input.IsRunning() ? runningRotateSpeed : walkingRotateSpeed) * Time.fixedDeltaTime;
+            float rotateSpeed = input.IsRunning() ? runningRotateSpeed : walkingRotateSpeed;
 
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, rotateSpeed);
         }
@@ -81,13 +81,13 @@ namespace NuiN.Movement
             if (_grounded)
             {
                 _curAirJumps = 0;
-                RB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                RB.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
                 return;
             }
 
             if (_curAirJumps >= maxAirJumps) return;
             
-            RB.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            RB.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
             _curAirJumps++;
         }
 
