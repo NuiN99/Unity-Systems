@@ -41,6 +41,8 @@ namespace NuiN.Movement
         void Update()
         {
             if(_input.ShouldJump()) _movement.Jump();
+            
+            if(CanRotate) _movement.Rotate(_input);
         }
 
         void FixedUpdate()
@@ -48,7 +50,6 @@ namespace NuiN.Movement
             IsRunning = _input.IsRunning(); // only for debugging
             
             if(CanMove) _movement.Move(_input);
-            if(CanRotate) _movement.Rotate(_input);
         }
         
         public void ApplyConstraint(float duration, MovementConstraint constraint)

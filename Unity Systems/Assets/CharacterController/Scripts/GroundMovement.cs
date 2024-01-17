@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using NuiN.NExtensions;
-using NuiN.ScriptableHarmony.Editor.Attributes;
 using UnityEngine;
 
 namespace NuiN.Movement
@@ -14,7 +11,6 @@ namespace NuiN.Movement
         bool _jumpOnCooldown;
 
         [Header("Dependencies")] 
-        [SerializeField] Transform head;
         [SerializeField] Transform feet;
 
         [Header("Move Speed Settings")]
@@ -74,9 +70,7 @@ namespace NuiN.Movement
             Quaternion rotation = input.GetRotation();
             float rotateSpeed = (input.IsRunning() ? runningRotateSpeed : walkingRotateSpeed) * Time.fixedDeltaTime;
 
-            head.rotation = Quaternion.RotateTowards(head.localRotation, rotation, rotateSpeed);
-
-            transform.rotation = Quaternion.Euler(transform.eulerAngles.x, head.eulerAngles.y, transform.eulerAngles.z);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, rotateSpeed);
         }
 
         void IMovement.Jump()
