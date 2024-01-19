@@ -20,6 +20,12 @@ public class PlayerMovementInput : MonoBehaviour, IMovementInput
     [SerializeField] float lookSensitivity = 20f;
     [Range(0f, 90f)][SerializeField] float yRotationLimit = 88f;
 
+    void Awake()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = true;
+    }
+
     void LateUpdate()
     {
         cam.position = headPos.position;
