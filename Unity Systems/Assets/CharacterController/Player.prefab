@@ -194,7 +194,7 @@ MonoBehaviour:
   walkingRotateSpeed: 99999
   runningRotateSpeed: 99999
   jumpForce: 5
-  maxAirJumps: 3
+  maxAirJumps: 1
   jumpDelay:
     seconds: 0.2
   downForceMult: 10
