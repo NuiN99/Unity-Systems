@@ -169,7 +169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1944ac1dbee28fa4788dad7f3e62d72e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 401051018504778823}
   <CanMove>k__BackingField: 1
   <CanRotate>k__BackingField: 1
   <IsRunning>k__BackingField: 0
@@ -186,23 +185,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   feet: {fileID: 4472354342425628189}
-  walkSpeed: 50
-  runSpeed: 75
-  airSpeedMult: 0.2
+  moveSpeed: 0.05
+  runSpeedMult: 1.5
+  maxAirVelocityMagnitude: 7.5
+  groundSpeedMult: 5
+  groundDrag: 5
+  airDrag: 0
   walkingRotateSpeed: 99999
   runningRotateSpeed: 99999
-  jumpForce: 7.5
-  maxAirJumps: 1
+  jumpForce: 5
+  maxAirJumps: 3
   jumpDelay:
-    seconds: 0.25
+    seconds: 0.2
   downForceMult: 10
-  groundDrag: 4
-  airDrag: 0.05
   groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
   groundCheckDist: 0.25
   slopeCheckDist: 0.25
+  rb: {fileID: 401051018504778823}
+  col: {fileID: 7199680711078145188}
 --- !u!114 &4629620327115826977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,7 +325,7 @@ Rigidbody:
   m_GameObject: {fileID: 8502157837297712684}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 5
+  m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -363,8 +365,8 @@ ConfigurableJoint:
   m_AngularYMotion: 2
   m_AngularZMotion: 2
   m_LinearLimitSpring:
-    spring: 0
-    damper: 0
+    spring: 50
+    damper: 10
   m_LinearLimit:
     limit: 5
     bounciness: 0

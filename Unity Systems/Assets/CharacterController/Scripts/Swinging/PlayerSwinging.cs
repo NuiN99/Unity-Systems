@@ -26,10 +26,7 @@ public class PlayerSwinging : MonoBehaviour
         else if(Input.GetKeyUp(activateKey)) Detach();
 
         if (!_attached)
-        {
             joint.connectedAnchor = transform.position;
-            return;
-        }
     }
 
     void Activate()

@@ -14,18 +14,11 @@ namespace NuiN.Movement
         
         List<MovementConstraint> _activeConstraints = new();
 
-        [SerializeField] Rigidbody rb;
-        
         [field: SerializeField, ReadOnlyPlayMode] public bool CanMove { get; private set; } = true;
         [field: SerializeField, ReadOnlyPlayMode] public bool CanRotate { get; private set; } = true;
         [field: SerializeField, ReadOnlyPlayMode] public bool IsRunning { get; private set; } = false;
         
         bool ConstraintApplied => _activeConstraints.Count > 0;
-
-        void Reset()
-        {
-            rb = rb ? rb : GetComponent<Rigidbody>();
-        }
 
         void Awake()
         {
@@ -34,8 +27,6 @@ namespace NuiN.Movement
             
             _input = GetComponent<IMovementInput>();
             if (_input == null) Debug.LogError($"Missing MovementInput on {gameObject.name}", gameObject);
-            
-            _movement?.Assign(rb);
         }
 
         void Update()

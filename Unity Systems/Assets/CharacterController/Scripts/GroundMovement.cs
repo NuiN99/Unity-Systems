@@ -14,11 +14,15 @@ namespace NuiN.Movement
         [SerializeField] Transform feet;
 
         [Header("Move Speed Settings")]
-        [SerializeField] float walkSpeed = 10f;
-        [SerializeField] float runSpeed = 15f;
+        [SerializeField] float moveSpeed = 10f;
+        [SerializeField] float runSpeedMult = 1.5f;
 
-        [SerializeField] float airSpeedMult = 0.05f;
+        [SerializeField] float maxAirVelocityMagnitude = 10f;
 
+        [SerializeField] float groundSpeedMult = 5f;
+        [SerializeField] float groundDrag = 5f;
+        [SerializeField] float airDrag = 0.05f;
+        
         [Header("Rotate Speed Settings")]
         [SerializeField] float walkingRotateSpeed = 5f;
         [SerializeField] float runningRotateSpeed = 7.5f;
@@ -29,40 +33,61 @@ namespace NuiN.Movement
         [SerializeField] SerializedWaitForSeconds jumpDelay = new(0.25f);
         [SerializeField] float downForceMult = 1f;
 
-        [Header("Drag Settings")]
-        [SerializeField] float groundDrag = 4f;
-        [SerializeField] float airDrag = 0;
-        //[SerializeField] float forceAppliedDrag = 0.5f;
-        
         [Header("Environment Settings")]
         [SerializeField] LayerMask groundMask;
         [SerializeField] float groundCheckDist = 0.25f;
         [SerializeField] float slopeCheckDist = 0.25f;
         //[SerializeField] float maxSlopeAngle = 45f;
-        
-        public Rigidbody RB { get; set; }
+
+        [SerializeField] Rigidbody rb;
+        [SerializeField] Collider col;
+
+        void Reset()
+        {
+            rb = GetComponent<Rigidbody>();
+            col = GetComponent<Collider>();
+        }
 
         void FixedUpdate()
         {
-            if (RB.velocity.y < 0)
+            if (rb.velocity.y < 0)
             {
-                RB.AddForce(Vector3.down * downForceMult);
+                rb.AddForce(Vector3.down * downForceMult);
             }
         }
 
         void IMovement.Move(IMovementInput input)
         {
             Vector3 direction = input.GetDirection();
+
+            bool running = input.IsRunning();
+            float speed = (running ? moveSpeed * runSpeedMult : moveSpeed);
+            
             _grounded = Physics.Raycast(feet.position, -feet.up, out RaycastHit groundHit, groundCheckDist, groundMask);
             bool onSlope = Physics.Raycast(feet.position, feet.forward, out RaycastHit slopeHit, slopeCheckDist, groundMask);
 
-            RB.drag = _grounded ? groundDrag : airDrag;
+            Vector3 moveVector = direction * speed;
+            Vector3 newVelocity = rb.velocity.With(y: 0) + moveVector;
 
-            float speed = (input.IsRunning() ? runSpeed : walkSpeed);
+            if (!_grounded)
+            {
+                rb.drag = airDrag;
+                float maxAirVel = running ? maxAirVelocityMagnitude * runSpeedMult : maxAirVelocityMagnitude; 
+                if (newVelocity.magnitude >= maxAirVel)
+                {
+                    Vector3 clampedVector = Vector3.ClampMagnitude(newVelocity, maxAirVel);
+                    Vector3 allowedVector = clampedVector - rb.velocity.With(y: 0);
+
+                    moveVector = allowedVector;
+                }
+            }
+            else
+            {
+                moveVector *= groundSpeedMult;
+                rb.drag = groundDrag;
+            }
             
-            if (!_grounded) speed *= airSpeedMult;
-            
-            RB.AddForce(direction * speed);
+            rb.velocity += moveVector;
         }
 
         void IMovement.Rotate(IMovementInput input)
@@ -81,13 +106,13 @@ namespace NuiN.Movement
             if (_grounded)
             {
                 _curAirJumps = 0;
-                RB.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+                rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
                 return;
             }
 
             if (_curAirJumps >= maxAirJumps) return;
-            
-            RB.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+
+            rb.velocity += Vector3.up * jumpForce;
             _curAirJumps++;
         }
 
