@@ -35,16 +35,17 @@ public class ActiveRagdoll : MonoBehaviour
     
     [Header("Animation")]
     [SerializeField] AnimancerComponent animator;
-    [SerializeField] AnimationClip runAnim;
+    [SerializeField] AnimationClip walkAnim;
     [SerializeField] AnimationClip getUpFromBackDownAnim;
     [SerializeField] AnimationClip getUpFromFaceDownAnim;
+    [SerializeField] AnimationClip idleAnim;
     
     [Header("Limb Force")]
     [SerializeField] FollowLimb[] limbs;
     
     void Start()
     {
-        animator.Play(runAnim).Force();
+        animator.Play(idleAnim).Force();
     }
 
     void FixedUpdate()
@@ -93,10 +94,13 @@ public class ActiveRagdoll : MonoBehaviour
         }
 
         animatedRigRoot.position = hit.point;
+        animatedRigRoot.rotation = Quaternion.AngleAxis(physicalHips.eulerAngles.y, Vector3.up);
+
         
         bool lyingFaceDown = frontPos.position.y < backPos.position.y;
         AnimationClip getUpAnim = lyingFaceDown ? getUpFromFaceDownAnim : getUpFromBackDownAnim;
-        animator.Play(getUpAnim).Force();
+        animator.Play(getUpAnim).Force()
+            .OnComplete(() => animator.Play(walkAnim));
         
         _fullRagdoll = false;
     }
