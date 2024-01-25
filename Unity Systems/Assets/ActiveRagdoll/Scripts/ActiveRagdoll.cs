@@ -1,33 +1,45 @@
 using System.Collections;
+using System.Diagnostics;
+using System.Linq;
 using Animancer;
 using NuiN.NExtensions;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class ActiveRagdoll : MonoBehaviour
 {
     bool _fullRagdoll;
-
-    [SerializeField] AnimancerComponent animator;
-    [SerializeField] AnimationClip runAnim;
     
-    [SerializeField] float globalMoveForce = 1f;
-    [SerializeField] float globalRotateForce = 1f;
-    [SerializeField] float damping = 0.9f;
+    [Header("Force Settings")]
+    [SerializeField] float globalMoveForce = 0.7f;
+    [SerializeField] float globalRotateForce = 25f;
+    [SerializeField, Range(0f, 1f)] float damping = 0.75f;
 
-    [SerializeField] float maxOffBalanceDist = 2f;
+    [Header("Ragdoll Settings")]
+    [SerializeField] float maxOffBalanceDist = 0.3f;
+    [SerializeField] float getUpAfterRagdolledDelay = 2.5f;
+    [SerializeField] Transform animatedRigRoot;
+    [SerializeField] float getUpGroundDistReq = 1f;
 
-    [SerializeField] Transform physicalRigCenter;
+    [Header("Transform Positions")] 
+    [SerializeField] Transform physicalHips;
+    [SerializeField] Transform animatedHips;
+    [SerializeField] Transform frontPos;
+    [SerializeField] Transform backPos;
 
-    [SerializeField] float limbDrag = 2f;
-
-    [SerializeField] float maxVelocity = 2.5f;
-
-    [SerializeField] Rigidbody leftFoot;
-    [SerializeField] Rigidbody rightFoot;
-
+    [Header("Ground Check")]
     [SerializeField] float groundCheckDist = 0.25f;
     [SerializeField] LayerMask groundMask;
+    [SerializeField] Transform leftFootPhysical;
+    [SerializeField] Transform rightFootPhysical;
     
+    [Header("Animation")]
+    [SerializeField] AnimancerComponent animator;
+    [SerializeField] AnimationClip runAnim;
+    [SerializeField] AnimationClip getUpFromBackDownAnim;
+    [SerializeField] AnimationClip getUpFromFaceDownAnim;
+    
+    [Header("Limb Force")]
     [SerializeField] FollowLimb[] limbs;
     
     void Start()
@@ -38,33 +50,89 @@ public class ActiveRagdoll : MonoBehaviour
     void FixedUpdate()
     {
         if (_fullRagdoll) return;
+        
         foreach (var limb in limbs)
         {
-            limb.RB.drag = limbDrag;
-            limb.MoveToTarget(globalMoveForce, globalRotateForce, damping, maxVelocity);
+            limb.MoveToTarget(globalMoveForce, globalRotateForce, damping);
         }
         
-        float offBalanceDist = Vector3.Distance(physicalRigCenter.position.With(y: 0), GetAverageFootPos().With(y: 0));
+        float offBalanceDist = Vector3.Distance(physicalHips.position, animatedHips.position);
         bool offBalance = offBalanceDist >= maxOffBalanceDist;
         
-        if (offBalance)
+        if (offBalance || !FeetTouchingGround())
         {
             Ragdoll();
         }
     }
 
-    void Ragdoll()
+    bool FeetTouchingGround()
     {
-        _fullRagdoll = true;
-
-        foreach (var limb in limbs)
-        {
-            limb.RB.drag = 0f;
-        }
+        bool leftHit = Physics.Raycast(leftFootPhysical.position, Vector3.down, groundCheckDist, groundMask);
+        bool rightHit = Physics.Raycast(rightFootPhysical.position, Vector3.down, groundCheckDist, groundMask);
+        
+        DrawGroundCheckGizmos(leftHit, rightHit);
+        
+        return leftHit || rightHit;
     }
 
-    Vector3 GetAverageFootPos()
+    void Ragdoll()
     {
-        return (leftFoot.position + rightFoot.position) / 2;
+        animator.Stop();
+        _fullRagdoll = true;
+        StartCoroutine(GetUpAfterDelay(getUpAfterRagdolledDelay));
+    }
+
+    IEnumerator GetUpAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (!Physics.Raycast(physicalHips.position, Vector3.down, out RaycastHit hit, getUpGroundDistReq, groundMask))
+        {
+            StartCoroutine(GetUpAfterDelay(delay));
+            yield break;
+        }
+
+        animatedRigRoot.position = hit.point;
+        
+        bool lyingFaceDown = frontPos.position.y < backPos.position.y;
+        AnimationClip getUpAnim = lyingFaceDown ? getUpFromFaceDownAnim : getUpFromBackDownAnim;
+        animator.Play(getUpAnim).Force();
+        
+        _fullRagdoll = false;
+    }
+
+    void OnDrawGizmos()
+    {
+        if (!Application.isPlaying) return;
+
+        if (_fullRagdoll)
+        {
+            Transform getUpFrom = frontPos.position.y <= backPos.position.y ? frontPos : backPos;
+            
+            Gizmos.color = Color.green;
+            
+            Gizmos.DrawSphere(getUpFrom.position, 0.1f);
+            Gizmos.DrawRay(physicalHips.position, Vector3.down * getUpGroundDistReq);
+            
+            Gizmos.color = Color.white;
+            return;
+        }
+        
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(physicalHips.position, 0.1f);
+        
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(animatedHips.position, 0.1f);
+        
+        Gizmos.DrawLine(physicalHips.position, animatedHips.position);
+
+        Gizmos.color = Color.white;
+    }
+
+    [Conditional("UNITY_EDITOR")]
+    void DrawGroundCheckGizmos(bool leftFootStable, bool rightFootStable)
+    {
+        Debug.DrawRay(leftFootPhysical.position, Vector3.down * groundCheckDist, leftFootStable ? Color.green : Color.red);
+        Debug.DrawRay(rightFootPhysical.position, Vector3.down * groundCheckDist, rightFootStable ? Color.green : Color.red);
     }
 }

@@ -11,16 +11,12 @@ public class FollowLimb
 
     [SerializeField] float rotateAdjustFactor = 0.5f;
 
-    public void MoveToTarget(float moveMult, float rotateMult, float damping, float maxVelocity)
+    public void MoveToTarget(float moveMult, float rotateMult, float damping)
     {
         RotateToTarget(rotateMult);
         
-        Vector3 direction = Target.position - RB.position;
-        if (RB.velocity.magnitude < maxVelocity)
-        {
-            RB.velocity += direction * (MoveForce * moveMult * RB.position.y);
-        }
-
+        Vector3 direction = (Target.position - RB.position).normalized;
+        RB.velocity += direction * (MoveForce * moveMult);
         RB.velocity *= damping;
     }
 
