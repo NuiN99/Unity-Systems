@@ -4594,24 +4594,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1010318006}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1010318019 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 608321761475470972, guid: 0bd0eec35fee0004eb04672188d7fa2b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1010318006}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1010318020 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -6874584590210671055, guid: 0bd0eec35fee0004eb04672188d7fa2b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1010318006}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1010318021 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -5588326719299175106, guid: 0bd0eec35fee0004eb04672188d7fa2b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1010318006}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1010318022 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5465940246521907071, guid: 0bd0eec35fee0004eb04672188d7fa2b,
@@ -5523,22 +5505,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1280890158}
-  getUpAnim: {fileID: 7400000, guid: dad309973892da240a9dab42f938670f, type: 2}
-  runAnim: {fileID: 0}
-  globalMoveForce: 2
-  globalRotateForce: 0
-  damping: 0.95
-  maxOffBalanceDist: 0.4
-  lyingDownCheckRadius: 0.6
-  nonPhysicalRig: {fileID: 491979661}
-  nonPhysicalRigCenter: {fileID: 491979672}
+  runAnim: {fileID: -203655887218126122, guid: 0bd0eec35fee0004eb04672188d7fa2b, type: 3}
+  globalMoveForce: 1.75
+  globalRotateForce: 1
+  damping: 0.9
+  maxOffBalanceDist: 0.3
   physicalRigCenter: {fileID: 1010318022}
   limbDrag: 5
   maxVelocity: 2.5
-  phyiscalHead: {fileID: 1010318021}
-  physicalHips: {fileID: 1010318022}
-  leftFoot: {fileID: 1010318020}
-  rightFoot: {fileID: 1010318019}
+  leftFoot: {fileID: 336243717}
+  rightFoot: {fileID: 1094956234}
   groundCheckDist: 0.25
   groundMask:
     serializedVersion: 2
@@ -5546,48 +5522,59 @@ MonoBehaviour:
   limbs:
   - <RB>k__BackingField: {fileID: 1010318027}
     <Target>k__BackingField: {fileID: 491979670}
-    <MoveForce>k__BackingField: 0.39999998
-    <RotateForce>k__BackingField: 25
+    <MoveForce>k__BackingField: 1
+    <RotateForce>k__BackingField: 1
+    rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 1010318026}
     <Target>k__BackingField: {fileID: 491979672}
-    <MoveForce>k__BackingField: 0
-    <RotateForce>k__BackingField: 25
+    <MoveForce>k__BackingField: 1
+    <RotateForce>k__BackingField: 1
+    rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 289574868}
     <Target>k__BackingField: {fileID: 491979669}
     <MoveForce>k__BackingField: 0.5
-    <RotateForce>k__BackingField: 25
+    <RotateForce>k__BackingField: 1
+    rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 375965979}
     <Target>k__BackingField: {fileID: 491979668}
     <MoveForce>k__BackingField: 0.5
-    <RotateForce>k__BackingField: 25
+    <RotateForce>k__BackingField: 1
+    rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 296979962}
     <Target>k__BackingField: {fileID: 491979664}
-    <MoveForce>k__BackingField: 2.5
-    <RotateForce>k__BackingField: 25
+    <MoveForce>k__BackingField: 1
+    <RotateForce>k__BackingField: 1
+    rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 336243717}
     <Target>k__BackingField: {fileID: 491979665}
-    <MoveForce>k__BackingField: 2.5
-    <RotateForce>k__BackingField: 25
+    <MoveForce>k__BackingField: 1
+    <RotateForce>k__BackingField: 1
+    rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 1154327907}
     <Target>k__BackingField: {fileID: 491979667}
     <MoveForce>k__BackingField: 0.5
-    <RotateForce>k__BackingField: 25
+    <RotateForce>k__BackingField: 1
+    rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 1320607785}
     <Target>k__BackingField: {fileID: 491979666}
     <MoveForce>k__BackingField: 0.5
-    <RotateForce>k__BackingField: 25
+    <RotateForce>k__BackingField: 1
+    rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 1745678855}
     <Target>k__BackingField: {fileID: 491979662}
     <MoveForce>k__BackingField: 2.5
     <RotateForce>k__BackingField: 25
+    rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 1094956234}
     <Target>k__BackingField: {fileID: 491979663}
-    <MoveForce>k__BackingField: 2.5
-    <RotateForce>k__BackingField: 25
+    <MoveForce>k__BackingField: 1
+    <RotateForce>k__BackingField: 1
+    rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 858161535}
     <Target>k__BackingField: {fileID: 491979671}
     <MoveForce>k__BackingField: 0.29999998
-    <RotateForce>k__BackingField: 25
+    <RotateForce>k__BackingField: 1
+    rotateAdjustFactor: 0.5
 --- !u!4 &1280890160
 Transform:
   m_ObjectHideFlags: 0
@@ -9297,11 +9284,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 401051018504778823, guid: 99f3432cd64d2f9458d627de87621b4b,
-        type: 3}
-      propertyPath: m_Mass
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 4629620327115826977, guid: 99f3432cd64d2f9458d627de87621b4b,
         type: 3}
       propertyPath: cam
@@ -9355,16 +9337,6 @@ PrefabInstance:
     - target: {fileID: 5453803518092506982, guid: 99f3432cd64d2f9458d627de87621b4b,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428673127122311650, guid: 99f3432cd64d2f9458d627de87621b4b,
-        type: 3}
-      propertyPath: m_LinearLimitSpring.damper
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6428673127122311650, guid: 99f3432cd64d2f9458d627de87621b4b,
-        type: 3}
-      propertyPath: m_LinearLimitSpring.spring
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6657949800820714937, guid: 99f3432cd64d2f9458d627de87621b4b,
