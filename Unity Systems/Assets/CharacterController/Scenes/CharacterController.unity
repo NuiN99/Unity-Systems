@@ -5648,7 +5648,8 @@ MonoBehaviour:
   getUpAfterRagdolledDelay: 2.5
   animatedRigRoot: {fileID: 491979661}
   getUpGroundDistReq: 1
-  physicalHips: {fileID: 1010318022}
+  getUpVelocityThreshold: 1
+  physicalHips: {fileID: 1010318026}
   animatedHips: {fileID: 491979672}
   frontPos: {fileID: 987209168}
   backPos: {fileID: 590817569}

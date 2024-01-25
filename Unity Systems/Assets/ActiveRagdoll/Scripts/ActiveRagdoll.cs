@@ -20,9 +20,10 @@ public class ActiveRagdoll : MonoBehaviour
     [SerializeField] float getUpAfterRagdolledDelay = 2.5f;
     [SerializeField] Transform animatedRigRoot;
     [SerializeField] float getUpGroundDistReq = 1f;
+    [SerializeField] float getUpVelocityThreshold = 1f;
 
     [Header("Transform Positions")] 
-    [SerializeField] Transform physicalHips;
+    [SerializeField] Rigidbody physicalHips;
     [SerializeField] Transform animatedHips;
     [SerializeField] Transform frontPos;
     [SerializeField] Transform backPos;
@@ -45,7 +46,7 @@ public class ActiveRagdoll : MonoBehaviour
     
     void Start()
     {
-        animator.Play(idleAnim).Force();
+        animator.Play(idleAnim, 1f).Force();
     }
 
     void FixedUpdate()
@@ -87,20 +88,20 @@ public class ActiveRagdoll : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        if (!Physics.Raycast(physicalHips.position, Vector3.down, out RaycastHit hit, getUpGroundDistReq, groundMask))
+        if (physicalHips.velocity.magnitude >= getUpVelocityThreshold || 
+            !Physics.Raycast(physicalHips.position, Vector3.down, out RaycastHit hit, getUpGroundDistReq, groundMask))
         {
             StartCoroutine(GetUpAfterDelay(delay));
             yield break;
         }
 
         animatedRigRoot.position = hit.point;
-        animatedRigRoot.rotation = Quaternion.AngleAxis(physicalHips.eulerAngles.y, Vector3.up);
-
+        animatedRigRoot.rotation = Quaternion.Euler(0, physicalHips.rotation.eulerAngles.y, 0);
         
         bool lyingFaceDown = frontPos.position.y < backPos.position.y;
         AnimationClip getUpAnim = lyingFaceDown ? getUpFromFaceDownAnim : getUpFromBackDownAnim;
-        animator.Play(getUpAnim).Force()
-            .OnComplete(() => animator.Play(walkAnim));
+        animator.Play(getUpAnim, 1f).Force()
+            .OnComplete(() => animator.Play(walkAnim, 1f));
         
         _fullRagdoll = false;
     }
