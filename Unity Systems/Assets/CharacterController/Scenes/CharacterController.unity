@@ -5505,10 +5505,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1280890158}
-  runAnim: {fileID: -203655887218126122, guid: 0bd0eec35fee0004eb04672188d7fa2b, type: 3}
-  globalMoveForce: 1.75
-  globalRotateForce: 1
-  damping: 0.9
+  runAnim: {fileID: 7400000, guid: 400bc9ac559653249b2f4e5e139e5ced, type: 2}
+  globalMoveForce: 2
+  globalRotateForce: 25
+  damping: 0.75
   maxOffBalanceDist: 0.3
   physicalRigCenter: {fileID: 1010318022}
   limbDrag: 5
@@ -5532,12 +5532,12 @@ MonoBehaviour:
     rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 289574868}
     <Target>k__BackingField: {fileID: 491979669}
-    <MoveForce>k__BackingField: 0.5
+    <MoveForce>k__BackingField: 1
     <RotateForce>k__BackingField: 1
     rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 375965979}
     <Target>k__BackingField: {fileID: 491979668}
-    <MoveForce>k__BackingField: 0.5
+    <MoveForce>k__BackingField: 1
     <RotateForce>k__BackingField: 1
     rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 296979962}
@@ -5552,12 +5552,12 @@ MonoBehaviour:
     rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 1154327907}
     <Target>k__BackingField: {fileID: 491979667}
-    <MoveForce>k__BackingField: 0.5
+    <MoveForce>k__BackingField: 1
     <RotateForce>k__BackingField: 1
     rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 1320607785}
     <Target>k__BackingField: {fileID: 491979666}
-    <MoveForce>k__BackingField: 0.5
+    <MoveForce>k__BackingField: 1
     <RotateForce>k__BackingField: 1
     rotateAdjustFactor: 0.5
   - <RB>k__BackingField: {fileID: 1745678855}
