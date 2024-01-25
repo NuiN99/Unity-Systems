@@ -58,10 +58,7 @@ public class ActiveRagdoll : MonoBehaviour
             limb.MoveToTarget(globalMoveForce, globalRotateForce, damping);
         }
         
-        float offBalanceDist = Vector3.Distance(physicalHips.position, animatedHips.position);
-        bool offBalance = offBalanceDist >= maxOffBalanceDist;
-        
-        if (offBalance || !FeetTouchingGround())
+        if (OffBalance() || !FeetTouchingGround())
         {
             Ragdoll();
         }
@@ -75,6 +72,13 @@ public class ActiveRagdoll : MonoBehaviour
         DrawGroundCheckGizmos(leftHit, rightHit);
         
         return leftHit || rightHit;
+    }
+
+    bool OffBalance()
+    {
+        float offBalanceDist = Vector3.Distance(physicalHips.position, animatedHips.position);
+        bool offBalance = offBalanceDist >= maxOffBalanceDist;
+        return offBalance;
     }
 
     void Ragdoll()

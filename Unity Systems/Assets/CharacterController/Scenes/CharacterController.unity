@@ -5653,7 +5653,7 @@ MonoBehaviour:
   animatedHips: {fileID: 491979672}
   frontPos: {fileID: 987209168}
   backPos: {fileID: 590817569}
-  groundCheckDist: 0.25
+  groundCheckDist: 0.4
   groundMask:
     serializedVersion: 2
     m_Bits: 55
