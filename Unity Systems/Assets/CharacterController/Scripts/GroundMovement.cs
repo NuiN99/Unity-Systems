@@ -30,7 +30,7 @@ namespace NuiN.Movement
         [Header("Jump Settings")]
         [SerializeField] float jumpForce = 25f;
         [SerializeField] int maxAirJumps = 1;
-        [SerializeField] SerializedWaitForSeconds jumpDelay = new(0.25f);
+        [SerializeField] SerializedWaitForSeconds jumpDelay;
         [SerializeField] float downForceMult = 1f;
 
         [Header("Environment Settings")]
@@ -41,6 +41,11 @@ namespace NuiN.Movement
 
         [SerializeField] Rigidbody rb;
         [SerializeField] Collider col;
+
+        void Awake()
+        {
+            jumpDelay.Init();
+        }
 
         void Reset()
         {
