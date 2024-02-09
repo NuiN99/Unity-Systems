@@ -188,8 +188,8 @@ MonoBehaviour:
   moveSpeed: 0.05
   runSpeedMult: 1.5
   maxAirVelocityMagnitude: 7.5
-  groundSpeedMult: 4
-  groundDrag: 5
+  groundSpeedMult: 5
+  groundDrag: 10
   airDrag: 0
   walkingRotateSpeed: 99999
   runningRotateSpeed: 99999
@@ -301,7 +301,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8502157837297712684}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5ae8172c0604327479b98b47e7334ae5, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

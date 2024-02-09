@@ -12,13 +12,13 @@ namespace NuiN.Movement
         [SerializeField] Transform feet;
 
         [Header("Move Speed Settings")]
-        [SerializeField] float moveSpeed = 0.09f;
+        [SerializeField] float moveSpeed = 0.05f;
         [SerializeField] float runSpeedMult = 1.5f;
 
         [SerializeField] float maxAirVelocityMagnitude = 7.5f;
 
-        [SerializeField] float groundSpeedMult = 4f;
-        [SerializeField] float groundDrag = 5f;
+        [SerializeField] float groundSpeedMult = 5f;
+        [SerializeField] float groundDrag = 10f;
         [SerializeField] float airDrag;
         
         [Header("Rotate Speed Settings")]
