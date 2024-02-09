@@ -188,23 +188,24 @@ MonoBehaviour:
   moveSpeed: 0.05
   runSpeedMult: 1.5
   maxAirVelocityMagnitude: 7.5
-  groundSpeedMult: 5
+  groundSpeedMult: 4
   groundDrag: 5
   airDrag: 0
   walkingRotateSpeed: 99999
   runningRotateSpeed: 99999
-  jumpForce: 5
-  maxAirJumps: 1
   jumpDelay:
-    seconds: 0.2
-  downForceMult: 10
+    duration: 0.2
+    startCompleted: 1
+  jumpForce: 7
+  maxAirJumps: 1
+  downForceMult: 0.01
+  downForceStartUpVelocity: 0.1
   groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
   groundCheckDist: 0.25
   slopeCheckDist: 0.25
   rb: {fileID: 401051018504778823}
-  col: {fileID: 7199680711078145188}
 --- !u!114 &4629620327115826977
 MonoBehaviour:
   m_ObjectHideFlags: 0
