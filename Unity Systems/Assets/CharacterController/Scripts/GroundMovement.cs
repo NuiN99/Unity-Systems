@@ -1,4 +1,3 @@
-using System.Collections;
 using NuiN.NExtensions;
 using UnityEngine;
 
@@ -8,30 +7,30 @@ namespace NuiN.Movement
     {
         int _curAirJumps;
         bool _grounded;
-        bool _jumpOnCooldown;
 
         [Header("Dependencies")] 
         [SerializeField] Transform feet;
 
         [Header("Move Speed Settings")]
-        [SerializeField] float moveSpeed = 10f;
+        [SerializeField] float moveSpeed = 0.09f;
         [SerializeField] float runSpeedMult = 1.5f;
 
-        [SerializeField] float maxAirVelocityMagnitude = 10f;
+        [SerializeField] float maxAirVelocityMagnitude = 7.5f;
 
-        [SerializeField] float groundSpeedMult = 5f;
+        [SerializeField] float groundSpeedMult = 4f;
         [SerializeField] float groundDrag = 5f;
-        [SerializeField] float airDrag = 0.05f;
+        [SerializeField] float airDrag;
         
         [Header("Rotate Speed Settings")]
         [SerializeField] float walkingRotateSpeed = 5f;
         [SerializeField] float runningRotateSpeed = 7.5f;
-        
-        [Header("Jump Settings")]
-        [SerializeField] float jumpForce = 25f;
+
+        [Header("Jump Settings")] 
+        [SerializeField] SimpleTimer jumpDelay = new(0.2f);
+        [SerializeField] float jumpForce = 7f;
         [SerializeField] int maxAirJumps = 1;
-        [SerializeField] SerializedWaitForSeconds jumpDelay;
-        [SerializeField] float downForceMult = 1f;
+        [SerializeField] float downForceMult = 0.1f;
+        [SerializeField] float downForceStartUpVelocity = 0.1f;
 
         [Header("Environment Settings")]
         [SerializeField] LayerMask groundMask;
@@ -40,60 +39,57 @@ namespace NuiN.Movement
         //[SerializeField] float maxSlopeAngle = 45f;
 
         [SerializeField] Rigidbody rb;
-        [SerializeField] Collider col;
-
-        void Awake()
-        {
-            jumpDelay.Init();
-        }
 
         void Reset()
         {
             rb = GetComponent<Rigidbody>();
-            col = GetComponent<Collider>();
+            GetComponent<Collider>();
         }
 
         void FixedUpdate()
         {
-            if (rb.velocity.y < 0)
+            if (rb.velocity.y <= downForceStartUpVelocity)
             {
-                rb.AddForce(Vector3.down * downForceMult);
+                rb.velocity += Vector3.down * downForceMult;
             }
         }
 
         void IMovement.Move(IMovementInput input)
         {
-            Vector3 direction = input.GetDirection();
+            Vector3 direction = input.GetDirection().With(y: 0);
 
             bool running = input.IsRunning();
             float speed = (running ? moveSpeed * runSpeedMult : moveSpeed);
-            
+    
             _grounded = Physics.Raycast(feet.position, -feet.up, out RaycastHit groundHit, groundCheckDist, groundMask);
             bool onSlope = Physics.Raycast(feet.position, feet.forward, out RaycastHit slopeHit, slopeCheckDist, groundMask);
 
             Vector3 moveVector = direction * speed;
-            Vector3 newVelocity = rb.velocity.With(y: 0) + moveVector;
+            Vector3 groundVelocity = rb.velocity.With(y: 0);
+            Vector3 nextFrameVelocity = groundVelocity + moveVector;
 
             if (!_grounded)
             {
                 rb.drag = airDrag;
                 float maxAirVel = running ? maxAirVelocityMagnitude * runSpeedMult : maxAirVelocityMagnitude; 
-                if (newVelocity.magnitude >= maxAirVel)
+                
+                // only allow movement in a direction that doesnt increase players forward velocity past the max air vel
+                if (nextFrameVelocity.magnitude >= maxAirVel && nextFrameVelocity.magnitude >= groundVelocity.magnitude)
                 {
-                    Vector3 clampedVector = Vector3.ClampMagnitude(newVelocity, maxAirVel);
-                    Vector3 allowedVector = clampedVector - rb.velocity.With(y: 0);
-
-                    moveVector = allowedVector;
+                    moveVector = Vector3.ProjectOnPlane(moveVector, rb.velocity.normalized);
                 }
             }
             else
             {
+                // account for ground drag
                 moveVector *= groundSpeedMult;
                 rb.drag = groundDrag;
+                _curAirJumps = 0;
             }
-            
+    
             rb.velocity += moveVector;
         }
+
 
         void IMovement.Rotate(IMovementInput input)
         {
@@ -105,27 +101,27 @@ namespace NuiN.Movement
 
         void IMovement.Jump()
         {
-            if (_jumpOnCooldown) return;
-            StartCoroutine(JumpDelayRoutine());
+            if (!jumpDelay.Complete()) return;
             
             if (_grounded)
             {
                 _curAirJumps = 0;
-                rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
+                rb.velocity = rb.velocity = rb.velocity.With(y: jumpForce);;
                 return;
             }
 
             if (_curAirJumps >= maxAirJumps) return;
-
-            rb.velocity += Vector3.up * jumpForce;
             _curAirJumps++;
-        }
 
-        IEnumerator JumpDelayRoutine()
-        {
-            _jumpOnCooldown = true;
-            yield return jumpDelay.Wait;
-            _jumpOnCooldown = false;
+            // only SETS y velocity when y velocity is less than potential jump force. Otherwise it would set y vel to a lower value when going faster
+            if (rb.velocity.y <= jumpForce)
+            {
+                rb.velocity = rb.velocity = rb.velocity.With(y: jumpForce);;
+            }
+            else
+            {
+                rb.velocity += Vector3.up * jumpForce;
+            }
         }
     }
 }
